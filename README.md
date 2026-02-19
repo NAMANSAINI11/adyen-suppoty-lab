@@ -1,1 +1,0 @@
-# adyen-suppoty-lab
