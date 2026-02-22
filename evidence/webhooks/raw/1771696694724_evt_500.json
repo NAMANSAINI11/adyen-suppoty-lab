@@ -1,0 +1,30 @@
+{
+  "receivedAt": "2026-02-21T17:58:14.724Z",
+  "signature": {
+    "provided": "54df781b2f782ad5493dea3bbf66458fe080c83eed5d93722d75c7255179d8da",
+    "expected": "54df781b2f782ad5493dea3bbf66458fe080c83eed5d93722d75c7255179d8da",
+    "valid": true
+  },
+  "idempotency": {
+    "eventId": "evt_500",
+    "dedupeKey": "evt_500",
+    "duplicate": true
+  },
+  "failMode": "500",
+  "headers": {
+    "x-signature": "54df781b2f782ad5493dea3bbf66458fe080c83eed5d93722d75c7255179d8da",
+    "content-type": "application/json",
+    "user-agent": "PostmanRuntime/7.51.1",
+    "accept": "*/*",
+    "postman-token": "7219bfd4-2553-4ae1-aae2-c5faf1a7dbdd",
+    "host": "localhost:3000",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content-length": "61"
+  },
+  "body": {
+    "eventId": "evt_500",
+    "type": "test.fail",
+    "test": "trigger 500"
+  }
+}

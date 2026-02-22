@@ -1,0 +1,27 @@
+{
+  "receivedAt": "2026-02-19T16:19:57.682Z",
+  "signature": {
+    "provided": null,
+    "expected": "ac4fe32fea61bfeefb15c232817f00a0891d069cc54d6e1ed6ad0e918d8271c0",
+    "valid": false
+  },
+  "idempotency": {
+    "eventId": null,
+    "dedupeKey": "hash_35f99575d3f3c4ac",
+    "duplicate": false
+  },
+  "failMode": "none",
+  "headers": {
+    "content-type": "application/json",
+    "user-agent": "PostmanRuntime/7.51.1",
+    "accept": "*/*",
+    "postman-token": "a6463d06-2f82-4b39-a3db-52b7a77b740c",
+    "host": "localhost:3000",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content-length": "25"
+  },
+  "body": {
+    "test": "hello adyen"
+  }
+}

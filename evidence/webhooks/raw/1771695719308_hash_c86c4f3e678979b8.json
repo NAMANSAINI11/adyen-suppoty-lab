@@ -1,0 +1,29 @@
+{
+  "receivedAt": "2026-02-21T17:41:59.302Z",
+  "signature": {
+    "provided": null,
+    "expected": "9d1ab824387089e15a7b3e24e5feb2e73896a4cf5b063fd4acfb4ee1e89c2326",
+    "valid": false
+  },
+  "idempotency": {
+    "eventId": null,
+    "dedupeKey": "hash_c86c4f3e678979b8",
+    "duplicate": false
+  },
+  "failMode": "none",
+  "headers": {
+    "content-type": "application/json",
+    "user-agent": "PostmanRuntime/7.51.1",
+    "accept": "*/*",
+    "postman-token": "1821310c-55b2-4dad-869e-6f504a783ff9",
+    "host": "localhost:3000",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content-length": "84"
+  },
+  "body": {
+    "title": "Status code lab",
+    "body": "Testing 201 created",
+    "userId": 1
+  }
+}

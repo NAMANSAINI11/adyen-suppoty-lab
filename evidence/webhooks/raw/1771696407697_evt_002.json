@@ -1,0 +1,30 @@
+{
+  "receivedAt": "2026-02-21T17:53:27.695Z",
+  "signature": {
+    "provided": "16244663c2d1e9fd4c2ea7df524b3ab26970fc1f8f6222d7a54bccb3785b1382",
+    "expected": "16244663c2d1e9fd4c2ea7df524b3ab26970fc1f8f6222d7a54bccb3785b1382",
+    "valid": true
+  },
+  "idempotency": {
+    "eventId": "evt_002",
+    "dedupeKey": "evt_002",
+    "duplicate": true
+  },
+  "failMode": "none",
+  "headers": {
+    "x-signature": "16244663c2d1e9fd4c2ea7df524b3ab26970fc1f8f6222d7a54bccb3785b1382",
+    "content-type": "application/json",
+    "user-agent": "PostmanRuntime/7.51.1",
+    "accept": "*/*",
+    "postman-token": "94c9694f-5da9-4cef-bf21-9c8bac33b15b",
+    "host": "localhost:3000",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content-length": "59"
+  },
+  "body": {
+    "eventId": "evt_002",
+    "type": "payment.captured",
+    "test": "ok"
+  }
+}
