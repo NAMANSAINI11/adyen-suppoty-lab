@@ -5,15 +5,17 @@ const path = require("path");
 
 const app = express();
 
+// Simple homepage (nice for quick local check)
 app.get("/", (req, res) => {
   res.status(200).send("OK - webhook receiver is running. Use POST /webhook");
 });
 
+// Health endpoint
 app.get("/health", (req, res) => {
-  res.status(200).json({ ok: true });
+  res.status(200).json({ ok: true, ts: new Date().toISOString() });
 });
 
-app.use(express.raw({ type: "*/*", limit: "2mb" }));
+// Raw body needed for signature validation
 app.use(express.raw({ type: "*/*", limit: "2mb" }));
 
 const PORT = process.env.PORT || 3000;
@@ -28,13 +30,9 @@ function hmacSha256Hex(secret, buf) {
   return crypto.createHmac("sha256", secret).update(buf).digest("hex");
 }
 
-app.get("/health", (req, res) => {
-  res.status(200).json({ ok: true, ts: new Date().toISOString() });
-});
-
 app.post("/webhook", (req, res) => {
   const receivedAt = new Date().toISOString();
-  const rawBody = req.body;
+  const rawBody = req.body; // Buffer
   const rawText = rawBody.toString("utf8");
   const headers = { ...req.headers };
 
@@ -44,14 +42,25 @@ app.post("/webhook", (req, res) => {
   const sigValid =
     typeof provided === "string" &&
     provided.length === expected.length &&
-    crypto.timingSafeEqual(Buffer.from(provided, "utf8"), Buffer.from(expected, "utf8"));
+    crypto.timingSafeEqual(
+      Buffer.from(provided, "utf8"),
+      Buffer.from(expected, "utf8")
+    );
 
   let parsed = null;
   let parseError = null;
-  try { parsed = JSON.parse(rawText); } catch (e) { parseError = e?.message || String(e); }
+  try {
+    parsed = JSON.parse(rawText);
+  } catch (e) {
+    parseError = e?.message || String(e);
+  }
 
   const eventId = parsed?.eventId || parsed?.id || null;
-  const fallback = crypto.createHash("sha256").update(rawBody).digest("hex").slice(0, 16);
+  const fallback = crypto
+    .createHash("sha256")
+    .update(rawBody)
+    .digest("hex")
+    .slice(0, 16);
   const dedupeKey = eventId || `hash_${fallback}`;
 
   const duplicate = seen.has(dedupeKey);
@@ -62,20 +71,37 @@ app.post("/webhook", (req, res) => {
   const filename = `${Date.now()}_${dedupeKey}.json`;
   fs.writeFileSync(
     path.join(RAW_DIR, filename),
-    JSON.stringify({
-      receivedAt,
-      signature: { provided: provided || null, expected, valid: !!sigValid },
-      idempotency: { eventId, dedupeKey, duplicate },
-      failMode: shouldFail500 ? "500" : "none",
-      headers,
-      body: parseError ? { raw: rawText, parseError } : parsed
-    }, null, 2),
+    JSON.stringify(
+      {
+        receivedAt,
+        signature: { provided: provided || null, expected, valid: !!sigValid },
+        idempotency: { eventId, dedupeKey, duplicate },
+        failMode: shouldFail500 ? "500" : "none",
+        headers,
+        body: parseError ? { raw: rawText, parseError } : parsed,
+      },
+      null,
+      2
+    ),
     "utf8"
   );
 
-  if (!sigValid) return res.status(401).json({ ok: false, reason: "Invalid/missing signature", ts: receivedAt });
-  if (shouldFail500) return res.status(500).json({ ok: false, reason: "Simulated 500", ts: receivedAt });
+  if (!sigValid)
+    return res
+      .status(401)
+      .json({ ok: false, reason: "Invalid/missing signature", ts: receivedAt });
 
-  return res.status(200).json({ ok: true, ack: true, duplicate, savedAs: `evidence/webhooks/raw/${filename}` });
+  if (shouldFail500)
+    return res
+      .status(500)
+      .json({ ok: false, reason: "Simulated 500", ts: receivedAt });
+
+  return res.status(200).json({
+    ok: true,
+    ack: true,
+    duplicate,
+    savedAs: `evidence/webhooks/raw/${filename}`,
+  });
 });
+
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
