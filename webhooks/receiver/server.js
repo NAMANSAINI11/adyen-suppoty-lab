@@ -4,6 +4,16 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
+
+app.get("/", (req, res) => {
+  res.status(200).send("OK - webhook receiver is running. Use POST /webhook");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ ok: true });
+});
+
+app.use(express.raw({ type: "*/*", limit: "2mb" }));
 app.use(express.raw({ type: "*/*", limit: "2mb" }));
 
 const PORT = process.env.PORT || 3000;
