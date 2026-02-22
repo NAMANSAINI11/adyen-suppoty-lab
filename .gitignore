@@ -1,2 +1,11 @@
+# dependencies
 node_modules/
+**/node_modules/
+
+# OS junk
 .DS_Store
+Thumbs.db
+
+# env
+.env
+.env.*
